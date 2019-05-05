@@ -1,5 +1,6 @@
 package com.example.auto_kartprototype;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -19,9 +20,29 @@ public class MainActivity extends AppCompatActivity {
         btnNuevaLista.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent startIntent = new Intent(getApplicationContext(), crearLista.class);
+                startActivity(startIntent);
 
             }
         });
         Button btnInvitaciones = (Button) findViewById(R.id.btnInvitaciones);
-    }
+        btnInvitaciones.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent startIntent = new Intent(getApplicationContext(), Invitaciones.class);
+                startActivity(startIntent);
+            }
+        });
+
+        Button btnConsultarListas = (Button) findViewById(R.id.btnConsultarListas);
+        btnConsultarListas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent startIntent = new Intent(getApplicationContext(), consultarListas.class);
+                startActivity(startIntent);
+            }
+        });
+
+    };
+
 }
