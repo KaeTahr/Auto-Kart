@@ -19,4 +19,9 @@ public class GroceryList {
         this.authorName = authorName;
     }
 
+    public void addItems (Grocery g)
+    {
+        this.items.add(g);
+    }
+
 }
