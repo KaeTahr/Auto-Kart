@@ -7,7 +7,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
+    // our list of grocery list
+    // list-ception
+    // that was the most reddit thing i've said in a while please sign me up for a gas chamber
+    public static ArrayList<GroceryList> List_GroceryLists = new ArrayList<GroceryList>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
