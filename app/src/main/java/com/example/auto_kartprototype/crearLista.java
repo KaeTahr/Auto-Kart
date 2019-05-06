@@ -1,5 +1,6 @@
 package com.example.auto_kartprototype;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -32,7 +33,13 @@ public class crearLista extends AppCompatActivity {
         else
         {
             MainActivity.List_GroceryLists.add(new GroceryList(text));
+
+
             Toast.makeText(this," lol you wrote: " + text, Toast.LENGTH_SHORT).show();
+
+            Intent returnIntent = new Intent();
+            //returnIntent.putExtra()
+            setResult(RESULT_OK);
             this.finish();
         }
     }

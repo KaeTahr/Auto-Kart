@@ -9,11 +9,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        android:
         <activity android:name=".consultarListas"></activity>
         <activity
             android:name=".Invitaciones"
             android:label="@string/title_activity_invitaciones"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity android:name=".crearLista" />
         <activity
             android:name=".MainActivity"

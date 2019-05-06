@@ -4,7 +4,7 @@ import java.util.ArrayList;
 public class GroceryList {
 
     public String listName;
-    public String authorName = "yo";
+    public String authorName = "El Bananero";
     public ArrayList<Grocery> items = new ArrayList<Grocery>();
 
 
