@@ -1,5 +1,6 @@
 package com.example.auto_kartprototype;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
@@ -29,6 +30,8 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
+import static android.support.v4.app.ActivityCompat.startActivityForResult;
+
 public class MainActivity extends AppCompatActivity {
     // our list of grocery list
     // list-ception
@@ -37,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private String User = "El Bananero";
 
     static final int UPDATE_LIST_REQUEST = 1;
+    static final int UPDATE_GROCERIES_REQUEST = 1;
 
     RecyclerView list;
     RecyclerView.Adapter adapter;
@@ -102,7 +106,8 @@ public class MainActivity extends AppCompatActivity {
             {
                 adapter.notifyDataSetChanged();
                 //updateList();
-                Snackbar.make(findViewById(android.R.id.content),"now u gots: " + adapter.getItemCount(),Snackbar.LENGTH_LONG).show();
+                Snackbar.make(findViewById(android.R.id.content),"now u gots: "
+                        + adapter.getItemCount(),Snackbar.LENGTH_LONG).show();
             }
         }
     }
@@ -116,6 +121,19 @@ public class MainActivity extends AppCompatActivity {
 
         adapter = new GroceryListAdapter(getApplicationContext(),List_GroceryLists,
                 this.findViewById(android.R.id.content));
+
+        ((GroceryListAdapter) adapter).setOnEntryClickListener(new GroceryListAdapter.OnEntryClickListener() {
+            @Override
+            public void onEntryClick(View view, int position) {
+
+                    Context context = view.getContext();
+                    Intent startIntent = new Intent(context, consultarListas.class);
+                    //startIntent.putExtra("selectedItem",v.get)
+                    ((Activity) context).startActivityForResult(startIntent,UPDATE_GROCERIES_REQUEST);
+
+            }
+        });
+
         list.setAdapter(adapter);
 
         ItemTouchHelper iTH = new ItemTouchHelper(new SwipeToDeleteThing((GroceryListAdapter) adapter));
@@ -127,7 +145,23 @@ public class MainActivity extends AppCompatActivity {
 
 class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.GroceryListViewHolder>
 {
-    public static class GroceryListViewHolder extends RecyclerView.ViewHolder
+
+
+    private OnEntryClickListener mOnEntryClickListener;
+
+    public interface OnEntryClickListener
+    {
+        void onEntryClick(View view, int position);
+    }
+
+    public void setOnEntryClickListener(OnEntryClickListener oECL)
+    {
+        mOnEntryClickListener = oECL;
+    }
+
+
+
+    public class GroceryListViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener
     {
         //TextView name, author;
@@ -144,9 +178,12 @@ class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.Grocery
         @Override
         public void onClick(View v)
         {
-            Toast.makeText(v.getContext(),"you pressed a thing wow",Toast.LENGTH_SHORT).show();
+            mOnEntryClickListener.onEntryClick(v,getLayoutPosition());
         }
     }
+
+
+
 
     private ArrayList<GroceryList> list_of_shit;
     private Context context;
@@ -160,6 +197,8 @@ class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.Grocery
         this.list_of_shit = arrayList;
         this.view = view;
     }
+
+
 
     public Context getContext()
     {
@@ -224,6 +263,8 @@ class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.Grocery
         notifyItemInserted(deletedItemPos);
     }
 
+
+
 }
 
 class SwipeToDeleteThing extends ItemTouchHelper.SimpleCallback
@@ -260,23 +301,15 @@ class SwipeToDeleteThing extends ItemTouchHelper.SimpleCallback
     {
         super.onChildDraw(c,recyclerView,viewHolder,dX,dY,actionState,isCurrentlyActive);
         View itemView = viewHolder.itemView;
-        int backgroundCornerOffset = 20;
+        int backgroundCornerOffset = 5;
 
         int iconMargin = (itemView.getHeight() - icon.getIntrinsicHeight()) / 2;
         int iconTop = itemView.getTop() + (itemView.getHeight() - icon.getIntrinsicHeight()) / 2;
         int iconBottom = iconTop + icon.getIntrinsicHeight();
-        //swipe right
-        if(dX > 0)
-        {
-            int iconLeft = itemView.getLeft() + iconMargin + icon.getIntrinsicWidth();
-            int iconRight = itemView.getLeft() + iconMargin;
-            icon.setBounds(iconLeft,iconTop,iconRight,iconBottom);
 
-            background.setBounds(itemView.getLeft(),itemView.getTop(),itemView.getLeft()
-                    + ((int) dX) + backgroundCornerOffset,itemView.getBottom());
-        }
+
         //swipe left
-        else if (dX < 0)
+        if (dX < 0)
         {
             int iconLeft = itemView.getRight() - iconMargin - icon.getIntrinsicWidth();
             int iconRight = itemView.getRight() - iconMargin;

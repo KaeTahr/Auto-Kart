@@ -9,7 +9,7 @@
     <android.support.v7.widget.RecyclerView
 
         android:layout_width="395dp"
-        android:layout_height="715dp"
+        android:layout_height="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
@@ -28,4 +28,12 @@
             android:layout_height="wrap_content"
             android:text="TextView" /> -->
     </android.support.v7.widget.RecyclerView>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sample Text"
+        tools:layout_editor_absoluteX="109dp"
+        tools:layout_editor_absoluteY="322dp" />
 </android.support.constraint.ConstraintLayout>
