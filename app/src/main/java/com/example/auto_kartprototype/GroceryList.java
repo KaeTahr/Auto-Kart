@@ -1,7 +1,9 @@
 package com.example.auto_kartprototype;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Set;
 
-public class GroceryList {
+public class GroceryList implements Serializable {
 
     public String listName;
     public String authorName;
@@ -20,7 +22,7 @@ public class GroceryList {
         this.authorName = authorName;
     }
 
-    public void addItems (Grocery g)
+    public void addItem (Grocery g)
     {
         this.items.add(g);
     }

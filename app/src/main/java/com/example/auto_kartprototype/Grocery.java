@@ -1,6 +1,8 @@
 package com.example.auto_kartprototype;
 
-public class Grocery {
+import java.io.Serializable;
+
+public class Grocery implements Serializable {
     public String name;
     public int amount;
 

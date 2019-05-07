@@ -32,6 +32,9 @@ public class Invitaciones extends AppCompatActivity {
     RecyclerView.LayoutManager lMan;
     TextView emptyText;
 
+    GroceryList titorList;
+    GroceryList hydeList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,15 +42,32 @@ public class Invitaciones extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //TODO: make sure these lists have groceries in them in the future
-        if(first_run) {
-            ListInvitations.add(new GroceryList("Invitación", "John Titor"));
-            ListInvitations.add(new GroceryList(
-                    "How To Legally Build A Bomb For Explicitly Self-Defense Purposes",
-                    "Samuel Hyde"));
+        if(first_run)
+        {
+            fillLists();
+
+            ListInvitations.add(titorList);
+            ListInvitations.add(hydeList);
             first_run = false;
         }
         updateList();
+
+    }
+
+    public void fillLists()
+    {
+        titorList = new GroceryList("A Time-Travel Adventure", "John Titor");
+        hydeList = new GroceryList(
+                "How To Legally Build A Bomb For Explicitly Self-Defense Purposes",
+                "Samuel Hyde");
+
+        titorList.addItem(new Grocery("IBM 5100",1));
+        titorList.addItem(new Grocery("Feels",9001));
+
+        hydeList.addItem(new Grocery("Nitroclycerin, Oz.", 30));
+        hydeList.addItem(new Grocery("Sawdust, Oz.", 10));
+        hydeList.addItem(new Grocery("Sodium Carbonate, Oz.", 1));
+        hydeList.addItem(new Grocery("Sodium Nitrate, Oz.", 5));
 
     }
 
@@ -83,6 +103,7 @@ public class Invitaciones extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // do something when accept
+                        GroceryList stuff = ListInvitations.get(position);
                         MainActivity.List_GroceryLists.add(ListInvitations.get(position));
                         setResult(RESULT_OK);
                         ((InvitationListAdapter) adapter).deleteItem(position,false);

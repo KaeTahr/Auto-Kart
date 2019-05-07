@@ -1,0 +1,29 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <EditText
+        android:id="@+id/itemTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Item"
+
+         />
+
+
+    <EditText
+        android:id="@+id/quanTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:width="64dp"
+
+        android:inputType="number"
+
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="64dp"
+        android:singleLine="true" />
+
+</RelativeLayout>

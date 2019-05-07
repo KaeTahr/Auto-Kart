@@ -27,11 +27,13 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import static android.support.v4.app.ActivityCompat.startActivityForResult;
@@ -174,7 +176,11 @@ public class MainActivity extends AppCompatActivity {
 
                     Context context = view.getContext();
                     Intent startIntent = new Intent(context, consultarListas.class);
-                    //startIntent.putExtra("selectedItem",v.get)
+
+                    Bundle bum = new Bundle();
+                    bum.putSerializable("selectedItem",(Serializable) List_GroceryLists.get(position));
+
+                    startIntent.putExtras(bum);
                     ((Activity) context).startActivityForResult(startIntent,UPDATE_GROCERIES_REQUEST);
 
             }

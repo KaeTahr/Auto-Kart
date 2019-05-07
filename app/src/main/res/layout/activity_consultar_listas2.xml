@@ -8,6 +8,7 @@
 
     <android.support.v7.widget.RecyclerView
 
+        android:id="@+id/List_Groceries"
         android:layout_width="395dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
@@ -28,5 +29,40 @@
             android:layout_height="wrap_content"
             android:text="TextView" /> -->
     </android.support.v7.widget.RecyclerView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:layout_marginEnd="16dp"
+
+        android:layout_marginRight="16dp"
+
+        android:layout_marginBottom="16dp"
+        android:scaleType="center"
+        android:tint="?attr/colorBackgroundFloating"
+        app:backgroundTint="@color/colorAccent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@android:drawable/ic_input_add" />
+
+    <TextView
+        android:id="@+id/empty_grocery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginEnd="411dp"
+        android:layout_marginRight="411dp"
+        android:layout_marginBottom="731dp"
+        android:text="Pulse el botón para agregar un nuevo elemento."
+        android:textColor="@android:color/secondary_text_dark"
+        android:textSize="18sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

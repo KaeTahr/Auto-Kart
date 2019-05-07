@@ -1,6 +1,8 @@
 package com.example.auto_kartprototype;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -16,28 +18,209 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class consultarListas extends AppCompatActivity {
 
+    RecyclerView list;
+    RecyclerView.Adapter adapter;
+    RecyclerView.LayoutManager lMan;
+    public static TextView emptyText;
+    public static ArrayList<Grocery> List_Groceries;// = new ArrayList<Grocery>();
 
-
+    static final int UPDATE_LIST_REQUEST = 1;
+    static final int UPDATE_GROCERIES_REQUEST = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_consultar_listas2);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_consultar_listas2);
+        //setContentView(R.layout.activity_main);
 
-       // ActionBar aBar = getSupportActionBar();
-       // aBar.setTitle("Lista");
+        ActionBar aBar = getSupportActionBar();
+        aBar.setTitle("Lista");
 
-       // Toolbar toolbar = findViewById(R.id.toolbar);
-        //toolbar.setTitle("Lista");
-        //setSupportActionBar(toolbar);
+        GroceryList tmp = (GroceryList) this.getIntent().getExtras().getSerializable("selectedItem");
+        List_Groceries = tmp.items;
 
+        updateList();
+        aBar.setTitle("Lista: " + tmp.listName);
 
+    }
+    public void updateList()
+    {
+        list = (RecyclerView) findViewById(R.id.List_Groceries);
+        emptyText = (TextView) findViewById(R.id.empty_grocery);
+
+        if(List_Groceries.isEmpty())
+        {
+            list.setVisibility(View.GONE);
+            emptyText.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            list.setVisibility(View.VISIBLE);
+            emptyText.setVisibility(View.GONE);
+        }
+
+        lMan = new LinearLayoutManager(this);
+        list.setLayoutManager(lMan);
+
+        adapter = new GroceryAdapter(getApplicationContext(),List_Groceries,
+                this.findViewById(android.R.id.content));
+
+        ((GroceryAdapter) adapter).setOnEntryClickListener(new GroceryAdapter.OnEntryClickListener() {
+            @Override
+            public void onEntryClick(View view, int position) {
+
+                Context context = view.getContext();
+                Intent startIntent = new Intent(context, consultarListas.class);
+                //startIntent.putExtra("selectedItem",v.get)
+                ((Activity) context).startActivityForResult(startIntent,UPDATE_GROCERIES_REQUEST);
+
+            }
+        });
+
+        list.setAdapter(adapter);
 
 
     }
 }
 
+class GroceryAdapter extends RecyclerView.Adapter<GroceryAdapter.GroceryViewHolder>
+{
+
+
+    private OnEntryClickListener mOnEntryClickListener;
+
+    public interface OnEntryClickListener
+    {
+        void onEntryClick(View view, int position);
+    }
+
+    public void setOnEntryClickListener(OnEntryClickListener oECL)
+    {
+        mOnEntryClickListener = oECL;
+    }
+
+
+
+    public class GroceryViewHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener
+    {
+        //TextView name, author;
+        protected TextView ItemTextView;
+        protected TextView QuanTextView;
+        public GroceryViewHolder(View itemView)
+        {
+            super(itemView);
+            itemView.setOnClickListener(this);
+            ItemTextView = (TextView) itemView.findViewById(R.id.itemTextView);
+            QuanTextView = (TextView) itemView.findViewById(R.id.quanTextView);
+        }
+
+        @Override
+        public void onClick(View v)
+        {
+            mOnEntryClickListener.onEntryClick(v,getLayoutPosition());
+        }
+    }
+
+
+
+
+    private ArrayList<Grocery> list_of_shit;
+    private Context context;
+    private Grocery deletedItem;
+    private int deletedItemPos;
+    private View view;
+
+    public GroceryAdapter(Context context, ArrayList<Grocery> arrayList, View view)
+    {
+        this.context = context;
+        this.list_of_shit = arrayList;
+        this.view = view;
+    }
+
+
+
+    public Context getContext()
+    {
+        return this.context;
+    }
+
+    public void clearList()
+    {
+        this.list_of_shit.clear();
+    }
+
+    @Override
+    public int getItemCount()
+    {
+        return list_of_shit.size();
+    }
+
+    @Override
+    public GroceryAdapter.GroceryViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+    {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.grocery_item,
+                parent, false);
+        GroceryViewHolder v = new GroceryViewHolder(view);
+        return v;
+    }
+
+    @Override
+    public void onBindViewHolder(GroceryAdapter.GroceryViewHolder holder, int pos)
+    {
+        //GroceryList obj = list_of_shit.get(pos);
+        Grocery obj = list_of_shit.get(pos);
+        holder.ItemTextView.setText(obj.name);
+        holder.QuanTextView.setText(Integer.toString(obj.amount));
+      //  holder.AuthorTextView.setText(list_of_shit.get(pos).authorName);
+       // holder.NameTextView.setText(list_of_shit.get(pos).listName);
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView rV)
+    {
+        super.onAttachedToRecyclerView(rV);
+    }
+
+    public void deleteItem(int pos)
+    {
+        deletedItem = list_of_shit.get(pos);
+        deletedItemPos = pos;
+        list_of_shit.remove(pos);
+        notifyItemRemoved(pos);
+        showUndoSnackbar();
+        if(this.list_of_shit.isEmpty())
+        {
+            consultarListas.emptyText.setVisibility(View.VISIBLE);
+            //MaemptyText.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            consultarListas.emptyText.setVisibility(View.GONE);
+        }
+    }
+    private void showUndoSnackbar()
+    {
+        Snackbar aloha = Snackbar.make(view,"Lista eliminada.",Snackbar.LENGTH_LONG);
+        aloha.setAction("DESHACER", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GroceryAdapter.this.undoDelete();
+            }
+        });
+        aloha.show();
+    }
+    private void undoDelete()
+    {
+        list_of_shit.add(deletedItemPos,deletedItem);
+        notifyItemInserted(deletedItemPos);
+        MainActivity.emptyText.setVisibility(View.GONE);
+    }
+
+
+
+}
