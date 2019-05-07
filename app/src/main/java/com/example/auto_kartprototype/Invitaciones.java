@@ -42,7 +42,8 @@ public class Invitaciones extends AppCompatActivity {
         //TODO: make sure these lists have groceries in them in the future
         if(first_run) {
             ListInvitations.add(new GroceryList("Invitación", "John Titor"));
-            ListInvitations.add(new GroceryList("How To Legally Build a Self-Defense Bomb",
+            ListInvitations.add(new GroceryList(
+                    "How To Legally Build A Bomb For Explicitly Self-Defense Purposes",
                     "Samuel Hyde"));
             first_run = false;
         }
