@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent startIntent = new Intent(getApplicationContext(), Invitaciones.class);
-                startActivity(startIntent);
+                startActivityForResult(startIntent,UPDATE_LIST_REQUEST);
             }
         });
 
@@ -119,9 +119,13 @@ public class MainActivity extends AppCompatActivity {
             {
                 adapter.notifyDataSetChanged();
                 //updateList();
-                Snackbar.make(findViewById(android.R.id.content),"now u gots: "
-                        + adapter.getItemCount(),Snackbar.LENGTH_LONG).show();
+                Snackbar.make(findViewById(android.R.id.content),"Nueva Lista Agregada."
+                        ,Snackbar.LENGTH_LONG).show();
             }
+            /*else
+            {
+                adapter.notifyDataSetChanged();
+            }*/
         }
     }
 
@@ -261,8 +265,8 @@ class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.Grocery
     }
     private void showUndoSnackbar()
     {
-        Snackbar aloha = Snackbar.make(view,"Item Deleted.",Snackbar.LENGTH_LONG);
-        aloha.setAction("UNDO", new View.OnClickListener() {
+        Snackbar aloha = Snackbar.make(view,"Lista eliminada.",Snackbar.LENGTH_LONG);
+        aloha.setAction("DESHACER", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 GroceryListAdapter.this.undoDelete();

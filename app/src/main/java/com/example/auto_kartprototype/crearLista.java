@@ -1,6 +1,7 @@
 package com.example.auto_kartprototype;
 
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -28,16 +29,17 @@ public class crearLista extends AppCompatActivity {
         if (TextUtils.isEmpty(text))
         {
 
-            Toast.makeText(this,"you didnt write anything dumbass", Toast.LENGTH_SHORT).show();
+           // Toast.makeText(this,"", Toast.LENGTH_SHORT).show();
+            Snackbar.make(view,"¡Debe nombrar la lista!",Snackbar.LENGTH_LONG).show();
         }
         else
         {
             MainActivity.List_GroceryLists.add(new GroceryList(text));
 
 
-            Toast.makeText(this," lol you wrote: " + text, Toast.LENGTH_SHORT).show();
+           // Toast.makeText(this," Lista Agregada: " + text, Toast.LENGTH_SHORT).show();
 
-            Intent returnIntent = new Intent();
+            //Intent returnIntent = new Intent();
             //returnIntent.putExtra()
             setResult(RESULT_OK);
             this.finish();

@@ -20,14 +20,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Invitaciones extends AppCompatActivity {
 
     static final int UPDATE_LIST = 1;
-    ArrayList<GroceryList> ListInvitations = new ArrayList<GroceryList>();
+    static boolean first_run = true;
+    static ArrayList<GroceryList> ListInvitations = new ArrayList<GroceryList>();
     RecyclerView list;
     RecyclerView.Adapter adapter;
     RecyclerView.LayoutManager lMan;
+    TextView emptyText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,10 +39,13 @@ public class Invitaciones extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        ListInvitations.add(new GroceryList("Invitación","John Titor"));
-        ListInvitations.add(new GroceryList("How To Legally Build a Self-Defense Bomb",
-                "Samuel Hyde"));
-
+        //TODO: make sure these lists have groceries in them in the future
+        if(first_run) {
+            ListInvitations.add(new GroceryList("Invitación", "John Titor"));
+            ListInvitations.add(new GroceryList("How To Legally Build a Self-Defense Bomb",
+                    "Samuel Hyde"));
+            first_run = false;
+        }
         updateList();
 
     }
@@ -47,6 +53,18 @@ public class Invitaciones extends AppCompatActivity {
     public void updateList()
     {
         list = (RecyclerView) findViewById(R.id.invitation_list);
+        emptyText = (TextView) findViewById(R.id.empty_view);
+
+        if(ListInvitations.isEmpty())
+        {
+            list.setVisibility(View.GONE);
+            emptyText.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            list.setVisibility(View.VISIBLE);
+            emptyText.setVisibility(View.GONE);
+        }
 
         lMan = new LinearLayoutManager(this);
         list.setLayoutManager(lMan);
@@ -64,13 +82,18 @@ public class Invitaciones extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // do something when accept
+                        MainActivity.List_GroceryLists.add(ListInvitations.get(position));
+                        setResult(RESULT_OK);
+                        ((InvitationListAdapter) adapter).deleteItem(position,false);
+                        updateList();
                     }
                 });
                 bob.setNegativeButton("Rechazar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // when it's a nogo do dis
-                        ((InvitationListAdapter) adapter).deleteItem(position);
+                        ((InvitationListAdapter) adapter).deleteItem(position,true);
+                        updateList();
                     }
                 });
 
@@ -183,23 +206,23 @@ class InvitationListAdapter extends RecyclerView.Adapter<InvitationListAdapter.I
         super.onAttachedToRecyclerView(rV);
     }
 
-    public void deleteItem(int pos)
+    public void deleteItem(int pos,boolean save)
     {
         deletedItem = list_of_shit.get(pos);
         deletedItemPos = pos;
         list_of_shit.remove(pos);
         notifyItemRemoved(pos);
-        showUndoSnackbar();
+        if(save) showUndoSnackbar();
+        else showSaveSnackbar();
     }
     private void showUndoSnackbar()
     {
-        Snackbar aloha = Snackbar.make(view,"Item Deleted.",Snackbar.LENGTH_LONG);
-        aloha.setAction("UNDO", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                InvitationListAdapter.this.undoDelete();
-            }
-        });
+        Snackbar aloha = Snackbar.make(view,"Invitación Rechazada.",Snackbar.LENGTH_LONG);
+        aloha.show();
+    }
+    private void showSaveSnackbar()
+    {
+        Snackbar aloha = Snackbar.make(view,"Invitación Agregada.",Snackbar.LENGTH_LONG);
         aloha.show();
     }
     private void undoDelete()
