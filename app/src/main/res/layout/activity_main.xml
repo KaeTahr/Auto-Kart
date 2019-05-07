@@ -56,5 +56,15 @@
         android:layout_marginTop="?attr/actionBarSize"
         app:layout_anchorGravity="bottom" />
 
+    <TextView
+        android:id="@+id/empty_main"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:text="No ha creado listas todavia.\nPulse el botón inferior para empezar."
+        android:textColor="@android:color/secondary_text_dark"
+        android:textSize="18sp" />
+
 
 </android.support.design.widget.CoordinatorLayout>

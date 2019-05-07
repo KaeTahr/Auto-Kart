@@ -4,13 +4,14 @@ import java.util.ArrayList;
 public class GroceryList {
 
     public String listName;
-    public String authorName = "El Bananero";
+    public String authorName;
     public ArrayList<Grocery> items = new ArrayList<Grocery>();
 
 
     public GroceryList(String listName)
     {
         this.listName = listName;
+        this.authorName = MainActivity.User;
     }
 
     public GroceryList(String listName, String authorName)

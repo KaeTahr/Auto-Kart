@@ -28,9 +28,12 @@ public class consultarListas extends AppCompatActivity {
         //setContentView(R.layout.activity_consultar_listas2);
         setContentView(R.layout.activity_main);
 
-        ActionBar aBar = getSupportActionBar();
-        aBar.setTitle("Lista");
+       // ActionBar aBar = getSupportActionBar();
+       // aBar.setTitle("Lista");
 
+       // Toolbar toolbar = findViewById(R.id.toolbar);
+        //toolbar.setTitle("Lista");
+        //setSupportActionBar(toolbar);
 
 
 

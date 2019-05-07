@@ -1,7 +1,9 @@
 package com.example.auto_kartprototype;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -39,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     // list-ception
     // that was the most reddit thing i've said in a while please sign me up for a gas chamber
     public static ArrayList<GroceryList> List_GroceryLists = new ArrayList<GroceryList>();
-    private String User = "El Bananero";
+    public static String User = "Jonathan Joestar";
 
     static final int UPDATE_LIST_REQUEST = 1;
     static final int UPDATE_GROCERIES_REQUEST = 1;
@@ -47,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView list;
     RecyclerView.Adapter adapter;
     RecyclerView.LayoutManager lMan;
+    public static TextView emptyText;
 
 
 
@@ -55,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Profile: "+User);
+        toolbar.setTitle("Perfil: "+User);
         setSupportActionBar(toolbar);
 
         ImageView imgButton = (ImageView)findViewById(R.id.invitationButton);
@@ -76,7 +79,8 @@ public class MainActivity extends AppCompatActivity {
         //curUser.append(User);
 
         updateList();
-
+        ItemTouchHelper iTH = new ItemTouchHelper(new SwipeToDeleteThing((GroceryListAdapter) adapter));
+        iTH.attachToRecyclerView(list);
 
         FloatingActionButton btnNuevaLista = (FloatingActionButton) findViewById(R.id.fab);
         btnNuevaLista.setOnClickListener(new View.OnClickListener() {
@@ -108,6 +112,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
@@ -121,6 +127,17 @@ public class MainActivity extends AppCompatActivity {
                 //updateList();
                 Snackbar.make(findViewById(android.R.id.content),"Nueva Lista Agregada."
                         ,Snackbar.LENGTH_LONG).show();
+
+                if(List_GroceryLists.isEmpty())
+                {
+                    list.setVisibility(View.GONE);
+                    emptyText.setVisibility(View.VISIBLE);
+                }
+                else
+                {
+                    list.setVisibility(View.VISIBLE);
+                    emptyText.setVisibility(View.GONE);
+                }
             }
             /*else
             {
@@ -132,6 +149,18 @@ public class MainActivity extends AppCompatActivity {
     public void updateList()
     {
         list = (RecyclerView) findViewById(R.id.grocery_list_list);
+        emptyText = (TextView) findViewById(R.id.empty_main);
+
+        if(List_GroceryLists.isEmpty())
+        {
+            list.setVisibility(View.GONE);
+            emptyText.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            list.setVisibility(View.VISIBLE);
+            emptyText.setVisibility(View.GONE);
+        }
 
         lMan = new LinearLayoutManager(this);
         list.setLayoutManager(lMan);
@@ -153,8 +182,7 @@ public class MainActivity extends AppCompatActivity {
 
         list.setAdapter(adapter);
 
-        ItemTouchHelper iTH = new ItemTouchHelper(new SwipeToDeleteThing((GroceryListAdapter) adapter));
-        iTH.attachToRecyclerView(list);
+
     }
 
 
@@ -262,6 +290,15 @@ class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.Grocery
         list_of_shit.remove(pos);
         notifyItemRemoved(pos);
         showUndoSnackbar();
+        if(this.list_of_shit.isEmpty())
+        {
+            MainActivity.emptyText.setVisibility(View.VISIBLE);
+            //MaemptyText.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            MainActivity.emptyText.setVisibility(View.GONE);
+        }
     }
     private void showUndoSnackbar()
     {
@@ -278,6 +315,7 @@ class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.Grocery
     {
         list_of_shit.add(deletedItemPos,deletedItem);
         notifyItemInserted(deletedItemPos);
+        MainActivity.emptyText.setVisibility(View.GONE);
     }
 
 
