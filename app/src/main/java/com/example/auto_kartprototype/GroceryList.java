@@ -27,4 +27,9 @@ public class GroceryList implements Serializable {
         this.items.add(g);
     }
 
+    public void replaceList (ArrayList<Grocery> shit)
+    {
+        this.items = shit;
+    }
+
 }

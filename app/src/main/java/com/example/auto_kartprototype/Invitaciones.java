@@ -56,13 +56,14 @@ public class Invitaciones extends AppCompatActivity {
 
     public void fillLists()
     {
-        titorList = new GroceryList("A Time-Travel Adventure", "John Titor");
+        titorList = new GroceryList("Utensilios Para Oficina", "John Titor");
         hydeList = new GroceryList(
-                "How To Legally Build A Bomb For Explicitly Self-Defense Purposes",
-                "Samuel Hyde");
+                "Ingredientes para Dinamita",
+                "Alfred Nobel");
 
         titorList.addItem(new Grocery("IBM 5100",1));
-        titorList.addItem(new Grocery("Feels",9001));
+        titorList.addItem(new Grocery("Lapices",400));
+        titorList.addItem(new Grocery("Cuadernos",300));
 
         hydeList.addItem(new Grocery("Nitroclycerin, Oz.", 30));
         hydeList.addItem(new Grocery("Sawdust, Oz.", 10));

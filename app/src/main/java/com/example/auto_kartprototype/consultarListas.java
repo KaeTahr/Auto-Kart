@@ -2,29 +2,37 @@ package com.example.auto_kartprototype;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.sql.Types.NULL;
 
 public class consultarListas extends AppCompatActivity {
 
@@ -50,10 +58,26 @@ public class consultarListas extends AppCompatActivity {
         List_Groceries = tmp.items;
 
         updateList();
-        ItemTouchHelper iTH = new ItemTouchHelper(new SwipeToDeleteGrocery((GroceryAdapter) adapter));
-        iTH.attachToRecyclerView(list);
+       // ItemTouchHelper iTH = new ItemTouchHelper(new SwipeToDeleteGrocery((GroceryAdapter) adapter));
+       // iTH.attachToRecyclerView(list);
         aBar.setTitle("Lista: " + tmp.listName);
 
+        FloatingActionButton btnNuevaLista = (FloatingActionButton) findViewById(R.id.fab2);
+        btnNuevaLista.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addItem();
+
+            }
+        });
+
+    }
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        MainActivity.List_GroceryLists.get(this.getIntent().getExtras()
+                .getInt("selIndex")).replaceList(List_Groceries);
     }
     public void updateList()
     {
@@ -81,6 +105,65 @@ public class consultarListas extends AppCompatActivity {
         list.setAdapter(adapter);
 
 
+    }
+
+    public void addItem()
+    {
+        AlertDialog.Builder bob = new AlertDialog.Builder(this);
+        bob.setTitle("Añadir Elemento");
+
+
+
+        final EditText tmp = new EditText(this);
+        final EditText tmp2 = new EditText(this);
+        LinearLayout lila = new LinearLayout(this);
+
+        lila.setOrientation(LinearLayout.VERTICAL);
+        tmp.setHint("Nombre de Elemento");
+        tmp2.setHint("Cantidad");
+        tmp2.setInputType(InputType.TYPE_CLASS_NUMBER);
+        lila.addView(tmp);
+        lila.addView(tmp2);
+        bob.setView(lila);
+
+
+        bob.setPositiveButton("Guardar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String name = "heck";
+                int amount = NULL;
+                try {
+                    name = tmp.getText().toString().trim();
+                    amount = Integer.parseInt(tmp2.getText().toString().trim());
+
+                    if(name.equals("") || amount != NULL)
+                    {
+                        List_Groceries.add(new Grocery(name,amount));
+                        updateList();
+                        Toast.makeText(getBaseContext(),"Elemento agregado.",Toast.LENGTH_LONG).show();
+                    }
+                    else
+                    {
+                        Toast.makeText(getBaseContext(),"Por favor llene todos los campos."
+                                ,Toast.LENGTH_LONG).show();
+                    }
+                }catch (Exception e)
+                {
+                    Toast.makeText(getBaseContext(),"Por favor llene todos los campos."
+                            ,Toast.LENGTH_LONG).show();
+                }
+
+
+
+            }
+        });
+        bob.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        bob.show();
     }
 }
 
@@ -146,12 +229,11 @@ class GroceryAdapter extends RecyclerView.Adapter<GroceryAdapter.GroceryViewHold
     @Override
     public void onBindViewHolder(GroceryAdapter.GroceryViewHolder holder, int pos)
     {
-        //GroceryList obj = list_of_shit.get(pos);
+
         Grocery obj = list_of_shit.get(pos);
         holder.ItemTextView.setText(obj.name);
         holder.QuanTextView.setText(Integer.toString(obj.amount));
-      //  holder.AuthorTextView.setText(list_of_shit.get(pos).authorName);
-       // holder.NameTextView.setText(list_of_shit.get(pos).listName);
+
     }
 
     @Override
@@ -194,6 +276,8 @@ class GroceryAdapter extends RecyclerView.Adapter<GroceryAdapter.GroceryViewHold
         notifyItemInserted(deletedItemPos);
         MainActivity.emptyText.setVisibility(View.GONE);
     }
+
+
 
 
 

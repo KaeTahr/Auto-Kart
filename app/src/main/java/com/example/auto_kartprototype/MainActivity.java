@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     // list-ception
     // that was the most reddit thing i've said in a while please sign me up for a gas chamber
     public static ArrayList<GroceryList> List_GroceryLists = new ArrayList<GroceryList>();
-    public static String User = "Jonathan Joestar";
+    public static String User = "Pepito";
 
     static final int UPDATE_LIST_REQUEST = 1;
     static final int UPDATE_GROCERIES_REQUEST = 1;
@@ -178,9 +178,11 @@ public class MainActivity extends AppCompatActivity {
                     Intent startIntent = new Intent(context, consultarListas.class);
 
                     Bundle bum = new Bundle();
+
                     bum.putSerializable("selectedItem",(Serializable) List_GroceryLists.get(position));
 
                     startIntent.putExtras(bum);
+                    startIntent.putExtra("selIndex",position);
                     ((Activity) context).startActivityForResult(startIntent,UPDATE_GROCERIES_REQUEST);
 
             }
